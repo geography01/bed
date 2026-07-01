@@ -1,46 +1,49 @@
 export default async function handler(req, res) {
-    if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
+    // सिर्फ POST रिक्वेस्ट को अनुमति दें
+    if (req.method !== 'POST') {
+        return res.status(405).json({ message: 'Method Not Allowed' });
+    }
 
     const { bookId, amount } = req.body;
 
     // =================================================================
     // ⚙️ एडमिन कंट्रोलर (ADMIN GATEWAY CONTROLLER)
     // =================================================================
-    // इन तीनों में से जो भी गेटवे आपको चालू रखना है, उसका नाम नीचे लिखें:
-    // विकल्प: "razorpay" या "jiopay" या "upitranzact"
+    // वर्तमान में आपने "upitranzact" (UPI Apps direct trigger) चालू किया है।
+    // भविष्य में बदलने के विकल्प: "razorpay" या "jiopay" या "upitranzact"
     
     const ACTIVE_GATEWAY = "upitranzact"; 
     
     // =================================================================
 
     try {
-        // 1. यदि रेजरपे एक्टिव है
+        // 🟢 रूट 1: यदि बैकएंड में Razorpay चालू है
         if (ACTIVE_GATEWAY === "razorpay") {
             return res.status(200).json({
                 success: true,
                 gateway: "razorpay",
-                key: "rzp_test_YOUR_RAZORPAY_KEY", // यहाँ अपनी रेजरपे की डालें
+                key: "rzp_test_YOUR_RAZORPAY_KEY", // भविष्य में यहाँ लाइव/टेस्ट की डालें
                 orderId: "ord_" + Math.random().toString(36).substring(2, 10),
-                amount: amount * 100 // रेजरपे के लिए पैसों में (₹399 = 39900)
+                amount: amount * 100 // रेजरपे के लिए पैसों में गणना
             });
         } 
         
-        // 2. यदि जिओपे एक्टिव है
+        // 🟢 रूट 2: यदि बैकएंड में JioPay चालू है
         else if (ACTIVE_GATEWAY === "jiopay") {
             return res.status(200).json({
                 success: true,
                 gateway: "jiopay",
-                mid: "YOUR_JIO_MERCHANT_ID", // अपनी जियोपे मर्चेंट आईडी डालें
+                mid: "YOUR_JIO_MERCHANT_ID", // भविष्य में यहाँ जियो मर्चेंट आईडी डालें
                 amount: amount
             });
         }
         
-        // 3. यदि UPITranzact एक्टिव है
+        // 🟢 रूट 3: यदि UPITranzact एक्टिव है (आपकी सेटिंग्स के अनुसार एक्टिवेटेड)
         else if (ACTIVE_GATEWAY === "upitranzact") {
             return res.status(200).json({
                 success: true,
                 gateway: "upitranzact",
-                vpa: "rahul880250@ybl", // अपनी असली UPI ID (जैसे GPay/PhonePe की) यहाँ डालें
+                vpa: "rahul880250@ybl", // आपकी असली UPI ID जहाँ पैसे सीधे जमा होंगे
                 merchantName: "B.ed ONE Store",
                 amount: amount
             });
