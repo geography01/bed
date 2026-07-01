@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     // वर्तमान में आपने "upitranzact" (UPI Apps direct trigger) चालू किया है।
     // भविष्य में बदलने के विकल्प: "razorpay" या "jiopay" या "upitranzact"
     
-    const ACTIVE_GATEWAY = "upitranzact"; 
+    const ACTIVE_GATEWAY = "jiopay"; 
     
     // =================================================================
 
