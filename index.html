@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B.ed - Handout Storefront</title>
+    <title>B.ed ONE - Handout Storefront</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         :root {
@@ -45,7 +45,6 @@
             padding: 0 20px;
         }
 
-        /* Navbar Styling */
         .navbar {
             padding: 20px 0;
             border-bottom: 1px solid var(--border-color);
@@ -68,10 +67,8 @@
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: normal;
         }
 
-        /* Header Layout */
         header {
             display: flex;
             justify-content: space-between;
@@ -95,7 +92,6 @@
             align-items: center;
         }
 
-        /* Category Filters */
         .category-filter-container {
             display: flex;
             gap: 10px;
@@ -116,7 +112,6 @@
             border-color: #1c3e94;
         }
 
-        /* Premium Grid layout */
         .ebooks-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -140,11 +135,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        .card-cover {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
         }
         .trust-badge {
             position: absolute;
@@ -199,7 +189,6 @@
         }
         .btn-buy:hover { background: #142c6a; }
 
-        /* Footer styling */
         footer {
             background-color: #0f172a;
             color: #f8fafc;
@@ -260,7 +249,7 @@
             
             <div class="premium-card">
                 <div class="card-image-container">
-                    <div style="color: white; font-weight: bold; text-align: center; padding: 20px;">[GS 1 English Cover Image]</div>
+                    <div style="color: white; font-weight: bold; text-align: center; padding: 20px;">📚 B.ed GS 1<br>(English)</div>
                     <div class="trust-badge">🔒 Secure</div>
                 </div>
                 <div class="card-content">
@@ -271,13 +260,13 @@
                         <span class="old-price">₹500</span>
                         <span class="book-price">₹399</span>
                     </div>
-                    <button class="btn-buy" onclick="purchaseBook('GS_1_ENG', 399)">🛒 Buy Now</button>
+                    <button class="btn-buy" onclick="purchaseBook('GS_1_ENG', 399, 'https://यहाँ_अपना_ENGLISH_PDF_लिंक_डालें')">🛒 Buy Now</button>
                 </div>
             </div>
 
             <div class="premium-card">
                 <div class="card-image-container">
-                    <div style="color: white; font-weight: bold; text-align: center; padding: 20px;">[GS 1 Hindi Cover Image]</div>
+                    <div style="color: white; font-weight: bold; text-align: center; padding: 20px;">📚 B.ed GS 1<br>(Hindi)</div>
                     <div class="trust-badge">🔒 Secure</div>
                 </div>
                 <div class="card-content">
@@ -288,7 +277,7 @@
                         <span class="old-price">₹500</span>
                         <span class="book-price">₹399</span>
                     </div>
-                    <button class="btn-buy" onclick="purchaseBook('GS_1_HIN', 399)">🛒 Buy Now</button>
+                    <button class="btn-buy" onclick="purchaseBook('GS_1_HIN', 399, 'https://यहाँ_अपना_HINDI_PDF_लिंक_डालें')">🛒 Buy Now</button>
                 </div>
             </div>
 
@@ -319,7 +308,6 @@
     </footer>
 
     <script>
-        // 🌓 Dark / Light Mode Logic
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
@@ -327,9 +315,9 @@
             html.setAttribute('data-theme', newTheme);
         }
 
-        // 💳 Secure Gateway Switcher Integration
-        async function purchaseBook(bookId, price) {
+        async function purchaseBook(bookId, price, downloadUrl) {
             try {
+                // 1. सुरक्षित बैकएंड से वर्तमान में एक्टिव गेटवे की जानकारी मांगना
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -337,7 +325,8 @@
                 });
                 const data = await response.json();
 
-                if(data.gateway === "razorpay") {
+                // 🟢 रूट 1: यदि बैकएंड में Razorpay चालू है
+                if (data.gateway === "razorpay") {
                     var options = {
                         "key": data.key,
                         "amount": data.amount,
@@ -345,20 +334,39 @@
                         "name": "B.ed ONE",
                         "description": "Purchase " + bookId,
                         "order_id": data.orderId,
-                        "handler": function (res){
-                            alert("भुगतान सफल! डाउनलोड लिंक आपके ईमेल पर भेज दिया गया है।");
-                            window.location.href = "https://your-secure-google-drive-or-pdf-link.com";
+                        "handler": function (res) {
+                            handlePaymentSuccess(downloadUrl);
                         },
                         "theme": { "color": "#1c3e94" }
                     };
                     var rzp = new Razorpay(options);
                     rzp.open();
-                } else {
-                    alert("सिस्टम अन्य एक्टिव गेटवे (PayU / JioPay) पर रीडायरेक्ट कर रहा है...");
+                } 
+                
+                // 🟢 ROOT 2: यदि बैकएंड में JioPay चालू है
+                else if (data.gateway === "jiopay") {
+                    alert("JioPay One सुरक्षित पेमेंट स्क्रीन पर रीडायरेक्ट किया जा रहा है...");
+                    // सफलता पर: handlePaymentSuccess(downloadUrl);
+                } 
+                
+                // 🟢 ROOT 3: यदि बैकएंड में UPITranzact चालू है
+                else if (data.gateway === "upitranzact") {
+                    const upiUrl = `upi://pay?pa=${data.vpa}&pn=${encodeURIComponent(data.merchantName)}&am=${data.amount}&cu=INR&tn=B.ed%20Notes%20Purchase`;
+                    window.location.href = upiUrl;
+                    
+                    setTimeout(() => {
+                        handlePaymentSuccess(downloadUrl);
+                    }, 5000); 
                 }
+
             } catch (err) {
-                alert("पेमेंट प्रोसेस लोड करने में असमर्थ। कृपया पुनः प्रयास करें।");
+                alert("भुगतान प्रक्रिया शुरू करने में त्रुटि। कृपया पुनः प्रयास करें।");
             }
+        }
+
+        function handlePaymentSuccess(downloadUrl) {
+            alert("भुगतान सफल रहा! आपके B.ed नोट्स की PDF फ़ाइल अब डाउनलोड हो रही है।");
+            window.location.href = downloadUrl;
         }
     </script>
 </body>
