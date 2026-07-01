@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B.ed ONE - Handout Storefront</title>
+    <!-- Razorpay SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         :root {
@@ -46,7 +47,7 @@
         }
 
         .navbar {
-            padding: 20px 0;
+            padding: 15px 0;
             border-bottom: 1px solid var(--border-color);
             background-color: var(--bg-main);
         }
@@ -55,18 +56,36 @@
             justify-content: space-between;
             align-items: center;
         }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .logo-img {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
         .logo-text {
             font-size: 24px;
             font-weight: 900;
             letter-spacing: 0.5px;
         }
+        
         .btn-library {
-            background: transparent;
-            color: var(--text-main);
+            background: #1e293b;
+            color: white;
             border: 1px solid var(--border-color);
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-library:hover {
+            background: #334155;
         }
 
         header {
@@ -130,11 +149,17 @@
 
         .card-image-container {
             position: relative;
-            background: #000;
+            background: #1e293b;
             height: 280px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+        .card-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .trust-badge {
             position: absolute;
@@ -146,6 +171,7 @@
             font-size: 10px;
             border-radius: 4px;
             font-weight: bold;
+            z-index: 2;
         }
 
         .card-content {
@@ -189,6 +215,75 @@
         }
         .btn-buy:hover { background: #142c6a; }
 
+        .library-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 20px;
+            margin: 50px auto 0;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .library-icon {
+            font-size: 48px;
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+        .library-heading { font-size: 22px; font-weight: bold; margin-bottom: 8px; }
+        .library-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
+        .library-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        .btn-find {
+            background: #06b6d4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 15px;
+        }
+        .btn-find:hover { background: #0891b2; }
+
+        /* 💎 [NEW] सुंदर डायनेमिक पॉप-अप अलर्ट बॉक्स की स्टाइलिंग */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .custom-alert-overlay.active { opacity: 1; pointer-events: auto; }
+        .custom-alert-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 30px; max-width: 420px; width: 90%;
+            text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-alert-overlay.active .custom-alert-box { transform: scale(1); }
+        .alert-status-icon { font-size: 50px; margin-bottom: 15px; display: inline-block; }
+        .alert-title-hi { font-size: 18px; font-weight: bold; margin-bottom: 4px; color: var(--text-main); }
+        .alert-title-en { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; font-style: italic; }
+        .btn-alert-close {
+            background: #1c3e94; color: white; border: none; padding: 10px 30px;
+            border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; width: 100%;
+        }
+        .btn-alert-close:hover { background: #142c6a; }
+
         footer {
             background-color: #0f172a;
             color: #f8fafc;
@@ -208,28 +303,26 @@
         .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
         .footer-col a { color: #94a3b8; text-decoration: none; font-size: 14px; }
         .footer-copy {
-            border-top: 1px solid #1e293b;
-            margin-top: 40px;
-            padding-top: 20px;
-            text-align: center;
-            font-size: 13px;
-            color: #64748b;
+            border-top: 1px solid #1e293b; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 13px; color: #64748b;
         }
     </style>
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container nav-flex">
-            <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+            <div class="logo-container" onclick="window.location.reload();">
+                <img src="https://via.placeholder.com/45/ff3333/ffffff?text=Logo" alt="Logo" class="logo-img">
                 <div class="logo-text">
-                    <span style="color: #1c3e94;">B.ed</span> <span style="color: #ff3333;">ONE</span>
+                    <span style="color: #38bdf8;">B.ed</span> <span style="color: #ef4444;">ONE</span>
                 </div>
             </div>
-            <button class="btn-library">My Library</button>
+            <button class="btn-library" onclick="scrollToLibrary()">My Library</button>
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main class="container">
         <header>
             <div>
@@ -245,11 +338,13 @@
             <button class="chip">B.ed MAINS</button>
         </div>
 
+        <!-- Ebooks Grid Start -->
         <div class="ebooks-grid">
             
+            <!-- 📌 पोस्ट नंबर 1: GS 1 English -->
             <div class="premium-card">
                 <div class="card-image-container">
-                    <div style="color: white; font-weight: bold; text-align: center; padding: 20px;">📚 B.ed GS 1<br>(English)</div>
+                    <img src="https://via.placeholder.com/260x280/1e293b/ffffff?text=GS+1+English+Cover" alt="GS 1 English">
                     <div class="trust-badge">🔒 Secure</div>
                 </div>
                 <div class="card-content">
@@ -258,15 +353,16 @@
                     <div class="meta-item">465 Pages • 3 MB (PDF)</div>
                     <div class="price-container">
                         <span class="old-price">₹500</span>
-                        <span class="book-price">₹9</span>
+                        <span class="book-price">₹399</span>
                     </div>
-                    <button class="btn-buy" onclick="purchaseBook('GS_1_ENG', 9, 'https://यहाँ_अपना_ENGLISH_PDF_लिंक_डालें')">🛒 Buy Now</button>
+                    <button class="btn-buy" onclick="purchaseBook('GS_1_ENG', 399, 'https://YOUR_ENGLISH_PDF_DOWNLOAD_LINK')">🛒 Buy Now</button>
                 </div>
             </div>
 
+            <!-- 📌 पोस्ट नंबर 2: GS 1 Hindi -->
             <div class="premium-card">
                 <div class="card-image-container">
-                    <div style="color: white; font-weight: bold; text-align: center; padding: 20px;">📚 B.ed GS 1<br>(Hindi)</div>
+                    <img src="https://via.placeholder.com/260x280/1e293b/ffffff?text=GS+1+Hindi+Cover" alt="GS 1 Hindi">
                     <div class="trust-badge">🔒 Secure</div>
                 </div>
                 <div class="card-content">
@@ -275,15 +371,91 @@
                     <div class="meta-item">465 Pages • 3 MB (PDF)</div>
                     <div class="price-container">
                         <span class="old-price">₹500</span>
-                        <span class="book-price">₹19</span>
+                        <span class="book-price">₹399</span>
                     </div>
-                    <button class="btn-buy" onclick="purchaseBook('GS_1_HIN', 19, 'https://यहाँ_अपना_HINDI_PDF_लिंक_डालें')">🛒 Buy Now</button>
+                    <button class="btn-buy" onclick="purchaseBook('GS_1_HIN', 399, 'https://YOUR_HINDI_PDF_DOWNLOAD_LINK')">🛒 Buy Now</button>
+                </div>
+            </div>
+
+            <!-- 📌 पोस्ट नंबर 3 -->
+            <div class="premium-card">
+                <div class="card-image-container">
+                    <img src="https://via.placeholder.com/260x280/334155/ffffff?text=Post+3+Coming+Soon" alt="Post 3">
+                    <div class="trust-badge">🔒 Secure</div>
+                </div>
+                <div class="card-content">
+                    <div><span class="category-tag">B.ed MAINS</span></div>
+                    <h3 class="book-title">Course Name 3</h3>
+                    <div class="meta-item">000 Pages • 0 MB (PDF)</div>
+                    <div class="price-container">
+                        <span class="old-price">₹500</span>
+                        <span class="book-price">₹399</span>
+                    </div>
+                    <button class="btn-buy" onclick="purchaseBook('BOOK_ID_3', 399, 'https://YOUR_PDF_LINK_3')">🛒 Buy Now</button>
+                </div>
+            </div>
+
+            <!-- 📌 पोस्ट नंबर 4 -->
+            <div class="premium-card">
+                <div class="card-image-container">
+                    <img src="https://via.placeholder.com/260x280/334155/ffffff?text=Post+4+Coming+Soon" alt="Post 4">
+                    <div class="trust-badge">🔒 Secure</div>
+                </div>
+                <div class="card-content">
+                    <div><span class="category-tag">B.ed MAINS</span></div>
+                    <h3 class="book-title">Course Name 4</h3>
+                    <div class="meta-item">000 Pages • 0 MB (PDF)</div>
+                    <div class="price-container">
+                        <span class="old-price">₹500</span>
+                        <span class="book-price">₹399</span>
+                    </div>
+                    <button class="btn-buy" onclick="purchaseBook('BOOK_ID_4', 399, 'https://YOUR_PDF_LINK_4')">🛒 Buy Now</button>
+                </div>
+            </div>
+
+            <!-- 📌 पोस्ट नंबर 5 -->
+            <div class="premium-card">
+                <div class="card-image-container">
+                    <img src="https://via.placeholder.com/260x280/334155/ffffff?text=Post+5+Coming+Soon" alt="Post 5">
+                    <div class="trust-badge">🔒 Secure</div>
+                </div>
+                <div class="card-content">
+                    <div><span class="category-tag">B.ed MAINS</span></div>
+                    <h3 class="book-title">Course Name 5</h3>
+                    <div class="meta-item">000 Pages • 0 MB (PDF)</div>
+                    <div class="price-container">
+                        <span class="old-price">₹500</span>
+                        <span class="book-price">₹399</span>
+                    </div>
+                    <button class="btn-buy" onclick="purchaseBook('BOOK_ID_5', 399, 'https://YOUR_PDF_LINK_5')">🛒 Buy Now</button>
                 </div>
             </div>
 
         </div>
+        <!-- Ebooks Grid End -->
+
+        <!-- डिजिटल लाइब्रेरी क्षेत्र -->
+        <div class="library-section" id="digital-library">
+            <div class="library-icon">📘</div>
+            <h3 class="library-heading">Access Your Digital Library</h3>
+            <p class="library-sub">Enter your registered Email or WhatsApp number to retrieve your purchases.</p>
+            <input type="text" placeholder="Email or WhatsApp Number" class="library-input">
+            <button class="btn-find" onclick="showCustomAlert('🔍', 'खोज जारी है... (डेटाबेस कनेक्ट होने पर सक्रिय होगा)', 'Searching... (Will be active once connected to database)')">🔍 Find My Books</button>
+        </div>
+
     </main>
 
+    <!-- 💎 [NEW] इन-बिल्ट डायनेमिक अलर्ट बॉक्स का ढांचा -->
+    <div class="custom-alert-overlay" id="customAlertOverlay">
+        <div class="custom-alert-box">
+            <span class="alert-status-icon" id="alertIcon">⚙️</span>
+            <div class="alert-title-hi" id="alertTextHi">संदेश यहाँ दिखेगा</div>
+            <div class="alert-title-en" id="alertTextEn">Message will appear here</div>
+            <button class="btn-alert-close" onclick="closeCustomAlert()">OK / ठीक है</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col" style="max-width: 250px;">
@@ -307,6 +479,7 @@
         <div class="footer-copy">© 2026 B.ed ONE. All rights reserved.</div>
     </footer>
 
+    <!-- Scripts -->
     <script>
         function toggleTheme() {
             const html = document.documentElement;
@@ -315,9 +488,25 @@
             html.setAttribute('data-theme', newTheme);
         }
 
+        function scrollToLibrary() {
+            document.getElementById('digital-library').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 💎 [NEW] डायनेमिक अलर्ट बॉक्स को दिखाने और बंद करने का फ़ंक्शन
+        function showCustomAlert(icon, textHi, textEn) {
+            document.getElementById('alertIcon').innerText = icon;
+            document.getElementById('alertTextHi').innerText = textHi;
+            document.getElementById('alertTextEn').innerText = textEn;
+            document.getElementById('customAlertOverlay').classList.add('active');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertOverlay').classList.remove('active');
+        }
+
+        // 📝 एकीकृत (Integrated) डायनेमिक पेमेंट फ़ंक्शन
         async function purchaseBook(bookId, price, downloadUrl) {
             try {
-                // 1. सुरक्षित बैकएंड से वर्तमान में एक्टिव गेटवे की जानकारी मांगना
                 const response = await fetch('/api/checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -325,7 +514,6 @@
                 });
                 const data = await response.json();
 
-                // 🟢 रूट 1: यदि बैकएंड में Razorpay चालू है
                 if (data.gateway === "razorpay") {
                     var options = {
                         "key": data.key,
@@ -342,14 +530,9 @@
                     var rzp = new Razorpay(options);
                     rzp.open();
                 } 
-                
-                // 🟢 ROOT 2: यदि बैकएंड में JioPay चालू है
                 else if (data.gateway === "jiopay") {
-                    alert("JioPay One सुरक्षित पेमेंट स्क्रीन पर रीडायरेक्ट किया जा रहा है...");
-                    // सफलता पर: handlePaymentSuccess(downloadUrl);
+                    showCustomAlert("💳", "JioPay One सुरक्षित पेमेंट स्क्रीन पर रीडायरेक्ट किया जा रहा है...", "Redirecting to secure JioPay One checkout screen...");
                 } 
-                
-                // 🟢 ROOT 3: यदि बैकएंड में UPITranzact चालू है
                 else if (data.gateway === "upitranzact") {
                     const upiUrl = `upi://pay?pa=${data.vpa}&pn=${encodeURIComponent(data.merchantName)}&am=${data.amount}&cu=INR&tn=B.ed%20Notes%20Purchase`;
                     window.location.href = upiUrl;
@@ -360,13 +543,15 @@
                 }
 
             } catch (err) {
-                alert("भुगतान प्रक्रिया शुरू करने में त्रुटि। कृपया पुनः प्रयास करें।");
+                showCustomAlert("⚠️", "भुगतान प्रक्रिया शुरू करने में त्रुटि। कृपया पुनः प्रयास करें।", "Error initiating payment process. Please try again.");
             }
         }
 
         function handlePaymentSuccess(downloadUrl) {
-            alert("भुगतान सफल रहा! आपके B.ed नोट्स की PDF फ़ाइल अब डाउनलोड हो रही है।");
-            window.location.href = downloadUrl;
+            showCustomAlert("🎉", "भुगतान सफल रहा! आपके B.ed नोट्स की PDF फ़ाइल अब डाउनलोड हो रही है।", "Payment successful! Your B.ed notes PDF file is now downloading.");
+            setTimeout(() => {
+                window.location.href = downloadUrl;
+            }, 3000); // छात्र को सक्सेस मैसेज पढ़ने के लिए 3 सेकंड का समय मिलेगा, फिर डाउनलोड शुरू होगा
         }
     </script>
 </body>
