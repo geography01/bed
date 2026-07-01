@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     // इन तीनों में से जो भी गेटवे आपको चालू रखना है, उसका नाम नीचे लिखें:
     // विकल्प: "razorpay" या "jiopay" या "upitranzact"
     
-    const ACTIVE_GATEWAY = "razorpay"; 
+    const ACTIVE_GATEWAY = "upitranzact"; 
     
     // =================================================================
 
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
             return res.status(200).json({
                 success: true,
                 gateway: "upitranzact",
-                vpa: "yourupihandle@ybl", // अपनी असली UPI ID (जैसे GPay/PhonePe की) यहाँ डालें
+                vpa: "rahul880250@ybl", // अपनी असली UPI ID (जैसे GPay/PhonePe की) यहाँ डालें
                 merchantName: "B.ed ONE Store",
                 amount: amount
             });
