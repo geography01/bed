@@ -44,8 +44,8 @@ export default async function handler(req, res) {
                 
                 // 🛑 अपनी असली डिटेल्स नीचे कूट्स "" के अंदर पेस्ट करें:
                 merchantId: "bwGiH0",
-                publicKey: "utz_live_e5048b33412458da",
-                secretKey: "4d05c32752ea54131a3a8b746f45908b",
+                publicKey: "utz_test_7ebce39ff223f06e",
+                secretKey: "48d793de1d34f2beb66a3c0eabc82bfb",
                 
                 // आपके पुराने पैरामीटर्स (बैकअप के लिए)
                 vpa: " ", 
