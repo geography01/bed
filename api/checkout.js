@@ -43,9 +43,9 @@ export default async function handler(req, res) {
                 amount: amount,
                 
                 // 🛑 अपनी असली डिटेल्स नीचे कूट्स "" के अंदर पेस्ट करें:
-                merchantId: "यहाँ अपनी UPITranzact मर्चेंट आईडी डालें",
-                publicKey: "UPIT_PUB_xxxxxx (यहाँ अपनी पब्लिक की डालें)",
-                secretKey: "UPIT_SEC_xxxxxx (यहाँ अपनी सीक्रेट की डालें)",
+                merchantId: "bwGiH0",
+                publicKey: "utz_live_e5048b33412458da",
+                secretKey: "4d05c32752ea54131a3a8b746f45908b",
                 
                 // आपके पुराने पैरामीटर्स (बैकअप के लिए)
                 vpa: "rahul880250@ybl", 
