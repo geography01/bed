@@ -48,7 +48,7 @@ export default async function handler(req, res) {
                 secretKey: "4d05c32752ea54131a3a8b746f45908b",
                 
                 // आपके पुराने पैरामीटर्स (बैकअप के लिए)
-                vpa: "rahul880250@ybl", 
+                vpa: " ", 
                 merchantName: "GKnews Store",
                 orderId: "TXN_" + Math.random().toString(36).substring(2, 10).toUpperCase()
             });
